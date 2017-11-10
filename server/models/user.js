@@ -56,6 +56,17 @@ UserSchema.methods.generateAuthToken = function () {
     });
 };
 
+// see construction of this method in Lecture 97 @ 2:40
+UserSchema.methods.removeToken = function (token) {
+    var user = this;
+
+    return user.update({
+        $pull: {
+            tokens: {token}
+        }
+    });
+};
+
 UserSchema.statics.findByToken = function (token) {
     var User = this; // method variable here as opposed to 'user', which is an instance varviable.
     var decoded;
