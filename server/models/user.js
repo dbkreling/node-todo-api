@@ -45,7 +45,7 @@ UserSchema.methods.generateAuthToken = function () {
     var user = this;
     var access = 'auth';
     // sintax of sign(object_to_be_signed, 'secret-string').toString()
-    var token = jwt.sign({_id: user._id.toHexString(), access}, 'abc123').toString();
+    var token = jwt.sign({_id: user._id.toHexString(), access}, process.env.JWT_SECRET).toString();
 
     // 'tokens' is a regular array, so use array methods to update it
     user.tokens.push({access, token});
@@ -72,7 +72,7 @@ UserSchema.statics.findByToken = function (token) {
     var decoded;
 
     try {
-        decoded = jwt.verify(token, 'abc123');
+        decoded = jwt.verify(token, process.env.JWT_SECRET);
     } catch (e) {
         return Promise.reject();
     };
